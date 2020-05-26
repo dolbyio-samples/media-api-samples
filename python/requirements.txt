@@ -1,0 +1,4 @@
+# You need the following libraries in order to use these samples.
+# You can get them by running:
+#     pip install -r requirements.txt
+requests
