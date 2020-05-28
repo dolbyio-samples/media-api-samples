@@ -15,7 +15,7 @@ Check the language specific README files for additional instructions.
 If you don't have a developer account please visit the website and sign up to
 get an API Key.
 
-https://dolby.io
+https://dolby.io/products/media-processing
 
 ## Environment Variables
 
