@@ -1,0 +1,232 @@
+{
+	"info": {
+		"_postman_id": "720ebb88-c9ba-408a-a690-a6eaa0bdddec",
+		"name": "Enhance",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Upload URL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c4ae62ed-4ac9-4161-b09d-d4eabbd19217",
+						"exec": [
+							"var data = JSON.parse(responseBody)",
+							"postman.setEnvironmentVariable(\"upload-file-url\", data.url)",
+							"",
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{x-api-key}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"url\": {{input-file-link}}\n}"
+				},
+				"url": {
+					"raw": "{{dolby-io-url}}/media/input",
+					"host": [
+						"{{dolby-io-url}}"
+					],
+					"path": [
+						"media",
+						"input"
+					]
+				},
+				"description": "Make sure to add your API key in the \"Headers\" section"
+			},
+			"response": []
+		},
+		{
+			"name": "Upload File",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "01f9658a-70c6-4995-b48d-e353d8365438",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": ""
+					}
+				},
+				"url": {
+					"raw": "{{upload-file-url}}",
+					"host": [
+						"{{upload-file-url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Enhance POST",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3ec5454e-73db-4610-b5ba-8f994a137415",
+						"exec": [
+							"var data = JSON.parse(responseBody)",
+							"postman.setEnvironmentVariable(\"job_id\", data.job_id)",
+							"",
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{x-api-key}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"input\": {{input-file-link}},\n    \"output\": {{output-file-link}},\n    \"content\": {\n\t\t\"type\": \"interview\"\n\t}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dolby-io-url}}/media/enhance",
+					"host": [
+						"{{dolby-io-url}}"
+					],
+					"path": [
+						"media",
+						"enhance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Enhance GET Result",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "122a7726-42f4-4306-9cf9-f1ef866479ca",
+						"exec": [
+							"console.log(`Running ${request.name}`)",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"if (body.status == \"Running\" || body.status == \"Pending\" ){",
+							"  setTimeout(function() {console.log(`Polling status...`)}, 2000);",
+							"  postman.setNextRequest(request.name);",
+							"} else {",
+							"  pm.test(\"Status code = 200\", function () { pm.response.to.have.status(200); });",
+							"  pm.test(\"API Status = 200\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"Success\");",
+							"  });",
+							"  console.log(\"Success\")",
+							"  ",
+							"  postman.setNextRequest(\"Download output\"); ",
+							"  /* you can also try postman.setNextRequest(null); */",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{x-api-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{dolby-io-url}}/media/enhance?job_id={{job_id}}",
+					"host": [
+						"{{dolby-io-url}}"
+					],
+					"path": [
+						"media",
+						"enhance"
+					],
+					"query": [
+						{
+							"key": "job_id",
+							"value": "{{job_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Download output",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				},
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{x-api-key}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{dolby-io-url}}/media/output?url={{output-file-download-link}}",
+					"host": [
+						"{{dolby-io-url}}"
+					],
+					"path": [
+						"media",
+						"output"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "{{output-file-download-link}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
