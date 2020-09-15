@@ -9,6 +9,7 @@ Check the language specific README files for additional instructions.
 * [python/README.md](python/README.md)
 * [javascript/README.md](javascript/README.md)
 * [cURL/README.md](curl/README.md)
+* [postman/README.md](postman/README.md)
 
 ## API Key
 
