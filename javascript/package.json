@@ -1,15 +1,15 @@
 {
   "name": "Dolby.io",
   "version": "1.0.0",
-  "description": "",
+  "description": "Sample code",
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "support@dolby.io",
-  "license": "BSD",
+  "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": ">=0.21.1",
     "got": "^11.1.2",
     "request": "^2.88.2"
   }
