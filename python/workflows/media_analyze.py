@@ -65,6 +65,7 @@ import json
 import logging
 import argparse
 import requests
+import shutil
 
 
 class App:
