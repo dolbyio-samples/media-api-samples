@@ -1,7 +1,7 @@
 
 # JavaScript
 
-To run the Python samples you need to install a Node.js environment and install
+To run the Javascript samples you need to install a Node.js environment and install
 the libraries referenced in package.json
 
 You may find these resources helpful:
