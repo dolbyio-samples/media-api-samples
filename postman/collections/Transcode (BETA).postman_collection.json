@@ -1,12 +1,12 @@
 {
 	"info": {
-		"_postman_id": "f5d3467b-0fdf-4b42-a917-87d28810034b",
-		"name": "Enhance",
+		"_postman_id": "fe9ae08e-e508-434e-b672-48fb1ef1a5af",
+		"name": "Transcode (BETA)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Start Enhancing",
+			"name": "Start Transcoding",
 			"event": [
 				{
 					"listen": "test",
@@ -23,10 +23,16 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{x-api-key}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"output\": \"{{output-file-link}}\",\n    \"content\": {\n\t\t\"type\": \"{{content-type}}\"\n\t}\n}",
+					"raw": "{\n    \"inputs\": [\n        {\n            \"source\": \"{{input-file-link}}\"\n        }\n    ],\n    \"outputs\": [\n        {\n            \"kind\": \"{{file-format}}\",\n            \"destination\": \"{{output-file-link}}\",\n            \"audio\": {\n                \"codec\": \"{{audio-codec}}\"\n            },\n            \"video\": {\n                \"codec\": \"{{video-codec}}\",\n                \"frame_rate\": {{frame-rate}},\n                \"width\": {{video-width}},\n                \"height\": {{video-height}}\n            }\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -34,20 +40,20 @@
 					}
 				},
 				"url": {
-					"raw": "{{dolby-io-url}}/media/enhance",
+					"raw": "{{dolby-io-url}}/media/transcode",
 					"host": [
 						"{{dolby-io-url}}"
 					],
 					"path": [
 						"media",
-						"enhance"
+						"transcode"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get Enhance Results",
+			"name": "Get Transcode Results",
 			"event": [
 				{
 					"listen": "test",
@@ -77,15 +83,21 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{x-api-key}}",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "{{dolby-io-url}}/media/enhance?job_id={{job_id}}",
+					"raw": "{{dolby-io-url}}/media/transcode?job_id={{job_id}}",
 					"host": [
 						"{{dolby-io-url}}"
 					],
 					"path": [
 						"media",
-						"enhance"
+						"transcode"
 					],
 					"query": [
 						{
@@ -98,21 +110,6 @@
 			"response": []
 		}
 	],
-	"auth": {
-		"type": "apikey",
-		"apikey": [
-			{
-				"key": "key",
-				"value": "x-api-key",
-				"type": "string"
-			},
-			{
-				"key": "value",
-				"value": "{{x-api-key}}",
-				"type": "string"
-			}
-		]
-	},
 	"event": [
 		{
 			"listen": "prerequest",
@@ -135,8 +132,33 @@
 	],
 	"variable": [
 		{
-			"key": "content-type",
-			"value": "",
+			"key": "file-format",
+			"value": "mp4",
+			"type": "string"
+		},
+		{
+			"key": "frame-rate",
+			"value": "23.976",
+			"type": "string"
+		},
+		{
+			"key": "video-codec",
+			"value": "h264",
+			"type": "string"
+		},
+		{
+			"key": "audio-codec",
+			"value": "aac_lc",
+			"type": "string"
+		},
+		{
+			"key": "video-width",
+			"value": "1920",
+			"type": "string"
+		},
+		{
+			"key": "video-height",
+			"value": "1080",
 			"type": "string"
 		}
 	]

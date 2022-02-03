@@ -1,0 +1,393 @@
+{
+	"info": {
+		"_postman_id": "86591d4d-3d00-4a6a-bc33-80e40d984d21",
+		"name": "Analyze (BETA)",
+		"description": "[https://docs.dolby.io/media-apis/reference/media-analyze-overview](https://docs.dolby.io/media-apis/reference/media-analyze-overview)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Diagnose",
+			"item": [
+				{
+					"name": "Diagnose POST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody)",
+									"postman.setEnvironmentVariable(\"job_id\", data.job_id)",
+									"",
+									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"content\": {\n          \"silence\": {\n               \"threshold\": {{silence-threshold}},\n               \"duration\": {{silence-duration}}\n          },\n          \"type\": \"{{content-type}}\"\n     }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dolby-io-url}}/media/diagnose",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"diagnose"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Diagnose GET",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(`Running ${request.name}`)",
+									"var body = JSON.parse(responseBody);",
+									"",
+									"if (body.status == \"Running\" || body.status == \"Pending\"){",
+									"  setTimeout(function() {console.log(`Waiting for success...`)}, 2000);",
+									"  postman.setNextRequest(request.name);",
+									"} else {",
+									"  pm.test(\"Status code = 200\", function () { pm.response.to.have.status(200); });",
+									"  pm.test(\"API Status = 200\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    console.log(\"JSONDATA\", jsonData);",
+									"    pm.expect(jsonData.status).to.eql(\"Success\");",
+									"  });",
+									"  console.log(\"Success\")",
+									"  ",
+									"  postman.setNextRequest(null); ",
+									"  /* you can also try postman.setNextRequest(null); */",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dolby-io-url}}/media/diagnose?job_id={{job_id}}",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"diagnose"
+							],
+							"query": [
+								{
+									"key": "job_id",
+									"value": "{{job_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "The Dolby.io Media Analyze Audio Diagnose API provides a quick diagnosis for discovering audio quality issues with your media.\n\n[https://docs.dolby.io/media-apis/reference/media-diagnose-post](https://docs.dolby.io/media-apis/reference/media-diagnose-post)"
+		},
+		{
+			"name": "Analyze",
+			"item": [
+				{
+					"name": "Start Analyzing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody)",
+									"postman.setEnvironmentVariable(\"job_id\", data.job_id)",
+									"",
+									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"output\": \"{{output-file-link}}\",\n    \"loudness\": {\n          \"profile\": \"{{loudness-profile}}\"\n     }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dolby-io-url}}/media/analyze",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"analyze"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Analyze GET Result",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(`Running ${request.name}`)",
+									"var body = JSON.parse(responseBody);",
+									"",
+									"if (body.status == \"Running\" || body.status == \"Pending\"){",
+									"  setTimeout(function() {console.log(`Waiting for success...`)}, 2000);",
+									"  postman.setNextRequest(request.name);",
+									"} else {",
+									"  pm.test(\"Status code = 200\", function () { pm.response.to.have.status(200); });",
+									"  pm.test(\"API Status = 200\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    console.log(\"JSONDATA\", jsonData);",
+									"    pm.expect(jsonData.status).to.eql(\"Success\");",
+									"  });",
+									"  console.log(\"Success\")",
+									"  ",
+									"  postman.setNextRequest(null); ",
+									"  /* you can also try postman.setNextRequest(null); */",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dolby-io-url}}/media/analyze?job_id={{job_id}}",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"analyze"
+							],
+							"query": [
+								{
+									"key": "job_id",
+									"value": "{{job_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Start analyzing to learn about your media.\n\n[https://docs.dolby.io/media-apis/reference/media-analyze-post](https://docs.dolby.io/media-apis/reference/media-analyze-post)"
+		},
+		{
+			"name": "Analyze Speech",
+			"item": [
+				{
+					"name": "Analyze Speech POST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody)",
+									"postman.setEnvironmentVariable(\"job_id\", data.job_id)",
+									"",
+									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"output\": \"{{output-file-link}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dolby-io-url}}/media/analyze/speech",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"analyze",
+								"speech"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Analyze Speech GET",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(`Running ${request.name}`)",
+									"var body = JSON.parse(responseBody);",
+									"",
+									"if (body.status == \"Running\" || body.status == \"Pending\"){",
+									"  setTimeout(function() {console.log(`Waiting for success...`)}, 2000);",
+									"  postman.setNextRequest(request.name);",
+									"} else {",
+									"  pm.test(\"Status code = 200\", function () { pm.response.to.have.status(200); });",
+									"  pm.test(\"API Status = 200\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    console.log(\"JSONDATA\", jsonData);",
+									"    pm.expect(jsonData.status).to.eql(\"Success\");",
+									"  });",
+									"  console.log(\"Success\")",
+									"  ",
+									"  postman.setNextRequest(null); ",
+									"  /* you can also try postman.setNextRequest(null); */",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dolby-io-url}}/media/analyze/speech?job_id={{job_id}}",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"analyze",
+								"speech"
+							],
+							"query": [
+								{
+									"key": "job_id",
+									"value": "{{job_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Start analyzing to learn about speech in your media.\n\n[https://docs.dolby.io/media-apis/reference/media-analyze-speech-post](https://docs.dolby.io/media-apis/reference/media-analyze-speech-post)"
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "{{x-api-key}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "loudness-profile",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "silence-threshold",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "silence-duration",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "content-type",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
