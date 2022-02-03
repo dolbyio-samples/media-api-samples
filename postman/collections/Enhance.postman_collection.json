@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "f5d3467b-0fdf-4b42-a917-87d28810034b",
 		"name": "Enhance",
+		"description": "The Dolby.io Media Enhance API improves the quality of your media.\n\n[https://docs.dolby.io/media-apis/reference/media-enhance-overview](https://docs.dolby.io/media-apis/reference/media-enhance-overview)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -13,7 +14,7 @@
 					"script": {
 						"exec": [
 							"var data = JSON.parse(responseBody)",
-							"postman.setEnvironmentVariable(\"job_id\", data.job_id)",
+							"pm.environment.set(\"job_id\", data.job_id)",
 							"",
 							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
 						],
@@ -26,7 +27,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"output\": \"{{output-file-link}}\",\n    \"content\": {\n\t\t\"type\": \"{{content-type}}\"\n\t}\n}",
+					"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"output\": \"{{output-file-link}}\",\n    \"content\": {\n        \"type\": \"{{content-type}}\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"

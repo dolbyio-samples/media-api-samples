@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "fe9ae08e-e508-434e-b672-48fb1ef1a5af",
 		"name": "Transcode (BETA)",
+		"description": "The Dolby.io Media Enhance API improves the quality of your media.\n\n[https://docs.dolby.io/media-apis/reference/media-transcode-overview](https://docs.dolby.io/media-apis/reference/media-transcode-overview)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -13,7 +14,7 @@
 					"script": {
 						"exec": [
 							"var data = JSON.parse(responseBody)",
-							"postman.setEnvironmentVariable(\"job_id\", data.job_id)",
+							"pm.environment.set(\"job_id\", data.job_id)",
 							"",
 							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
 						],

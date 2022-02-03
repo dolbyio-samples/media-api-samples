@@ -17,7 +17,7 @@
 							"script": {
 								"exec": [
 									"var data = JSON.parse(responseBody)",
-									"postman.setEnvironmentVariable(\"job_id\", data.job_id)",
+									"pm.environment.set(\"job_id\", data.job_id)",
 									"",
 									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
 								],
@@ -30,7 +30,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"content\": {\n          \"silence\": {\n               \"threshold\": {{silence-threshold}},\n               \"duration\": {{silence-duration}}\n          },\n          \"type\": \"{{content-type}}\"\n     }\n}",
+							"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"content\": {\n        \"silence\": {\n            \"threshold\": {{silence-threshold}},\n            \"duration\": {{silence-duration}}\n        },\n        \"type\": \"{{content-type}}\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -125,7 +125,7 @@
 							"script": {
 								"exec": [
 									"var data = JSON.parse(responseBody)",
-									"postman.setEnvironmentVariable(\"job_id\", data.job_id)",
+									"pm.environment.set(\"job_id\", data.job_id)",
 									"",
 									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
 								],
@@ -138,7 +138,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"output\": \"{{output-file-link}}\",\n    \"loudness\": {\n          \"profile\": \"{{loudness-profile}}\"\n     }\n}",
+							"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"output\": \"{{output-file-link}}\",\n    \"loudness\": {\n        \"profile\": \"{{loudness-profile}}\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -233,7 +233,7 @@
 							"script": {
 								"exec": [
 									"var data = JSON.parse(responseBody)",
-									"postman.setEnvironmentVariable(\"job_id\", data.job_id)",
+									"pm.environment.set(\"job_id\", data.job_id)",
 									"",
 									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
 								],
