@@ -32,7 +32,8 @@
 							"description": "The url should be in the form dlb://object-key where the object-key can be any alpha-numeric string. The object-key is unique to your account API Key so there is no risk of collision with other users."
 						}
 					]
-				}
+				},
+				"description": "You can download media you previously uploaded with /media/input  \nor media that was generated through another Dolby Media API.\n\nThe temporary storage should allow you to read and write to the dlb://  \nlocations for a period of at least 24 hours before it is removed."
 			},
 			"response": []
 		},
@@ -74,12 +75,12 @@
 						"input"
 					]
 				},
-				"description": "Make sure to add your API key in the \"Headers\" section"
+				"description": "To use the Dolby provided temporary storage is a two step process.\n\nYou start by declaring a `dlb://` url that you can reference in any other Media API calls. The response will provide a url where you can put your media. This allows you to use the `dlb://` url as a short-cut for a temporary storage location.\n\nYou'll be returned a pre-signed url you can use to `PUT` and upload your media file. The temporary storage should allow you to read and write to the dlb:// locations for a period of at least 24 hours before it is removed."
 			},
 			"response": []
 		},
 		{
-			"name": "Input PUT",
+			"name": "Upload Media to URL",
 			"event": [
 				{
 					"listen": "test",

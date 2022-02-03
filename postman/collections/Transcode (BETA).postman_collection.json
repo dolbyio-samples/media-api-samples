@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "fe9ae08e-e508-434e-b672-48fb1ef1a5af",
 		"name": "Transcode (BETA)",
-		"description": "The Dolby.io Media Enhance API improves the quality of your media.\n\n[https://docs.dolby.io/media-apis/reference/media-transcode-overview](https://docs.dolby.io/media-apis/reference/media-transcode-overview)",
+		"description": "The Dolby.io Media Transcode API transcodes your media to different formats.\n\n[https://docs.dolby.io/media-apis/reference/media-transcode-overview](https://docs.dolby.io/media-apis/reference/media-transcode-overview)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -24,13 +24,7 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "x-api-key",
-						"value": "{{x-api-key}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"inputs\": [\n        {\n            \"source\": \"{{input-file-link}}\"\n        }\n    ],\n    \"outputs\": [\n        {\n            \"kind\": \"{{file-format}}\",\n            \"destination\": \"{{output-file-link}}\",\n            \"audio\": {\n                \"codec\": \"{{audio-codec}}\"\n            },\n            \"video\": {\n                \"codec\": \"{{video-codec}}\",\n                \"frame_rate\": {{frame-rate}},\n                \"width\": {{video-width}},\n                \"height\": {{video-height}}\n            }\n        }\n    ]\n}",
@@ -49,12 +43,13 @@
 						"media",
 						"transcode"
 					]
-				}
+				},
+				"description": "Start transcoding to modify the size, bitrates, and formats for your media.\n\nThe `inputs` location and `outputs` are required to identify the source  \nmaterial and target for results.\n\nThis is an asynchronous operation so you will receive a `job_id` to use in calling `GET /media/transcode` to retrieve the job status.\n\nThere are additional optional parameters that can be provided to further specify the desired output content types."
 			},
 			"response": []
 		},
 		{
-			"name": "Get Transcode Results",
+			"name": "Get Transcode Status",
 			"event": [
 				{
 					"listen": "test",
@@ -84,13 +79,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "x-api-key",
-						"value": "{{x-api-key}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "{{dolby-io-url}}/media/transcode?job_id={{job_id}}",
 					"host": [
@@ -106,11 +95,27 @@
 							"value": "{{job_id}}"
 						}
 					]
-				}
+				},
+				"description": "For a given job_id, this method will check if the transcoding task has completed and return transcoding results."
 			},
 			"response": []
 		}
 	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{x-api-key}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",

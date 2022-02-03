@@ -43,12 +43,13 @@
 						"media",
 						"enhance"
 					]
-				}
+				},
+				"description": "Start enhancing to improve your media.\n\nThe `input` location for your source media file as well as the `output` location for the processed result are required.\n\nThis is an asynchronous operation so you will receive a `job_id` where you can retrieve the results when enhancement is complete.\n\nThere are additional optional parameters that can be provided to control and select the type of enhancements made. See the samples for some examples of what requests and responses look like."
 			},
 			"response": []
 		},
 		{
-			"name": "Get Enhance Results",
+			"name": "Get Enhance Status",
 			"event": [
 				{
 					"listen": "test",
@@ -94,7 +95,8 @@
 							"value": "{{job_id}}"
 						}
 					]
-				}
+				},
+				"description": "For a given job_id, this method will check if the processing task has completed and return the enhanced results.\n\nWhen the **status** is *Success* you'll be able to retrieve your  \nresult from the **output** location you provided in the original  \n`POST`."
 			},
 			"response": []
 		}

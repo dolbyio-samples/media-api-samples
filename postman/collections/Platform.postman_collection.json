@@ -97,7 +97,8 @@
 									"value": "{{job_id}}"
 								}
 							]
-						}
+						},
+						"description": "**POST /media/jobs/cancel** requests cancellation of a previously submitted job."
 					},
 					"response": []
 				}
@@ -144,7 +145,8 @@
 								"media",
 								"webhooks"
 							]
-						}
+						},
+						"description": "Register a webhook that is triggered when a job completes."
 					},
 					"response": []
 				},
@@ -188,7 +190,8 @@
 									"value": "{{webhook-id}}"
 								}
 							]
-						}
+						},
+						"description": "Update the previously registered webhook configuration."
 					},
 					"response": []
 				},
@@ -226,7 +229,8 @@
 									"value": "{{webhook-id}}"
 								}
 							]
-						}
+						},
+						"description": "Retrieve the previously registered webhook configuration."
 					},
 					"response": []
 				},
@@ -261,7 +265,8 @@
 									"value": "{{webhook-id}}"
 								}
 							]
-						}
+						},
+						"description": "Delete a previously registered webhook configuration."
 					},
 					"response": []
 				}
@@ -327,7 +332,8 @@
 						"oauth2",
 						"token"
 					]
-				}
+				},
+				"description": "Generates an access token to be used for Bearer Authentication for Media API calls. The token will expire in 12 hours."
 			},
 			"response": []
 		}
