@@ -1,0 +1,156 @@
+{
+	"info": {
+		"_postman_id": "5bb5f20f-eb1f-4538-be77-243ef9a55a15",
+		"name": "Input and Output",
+		"description": "The Dolby.io Media Input and Media Output APIs for reading and writing dlb:// URLs.\n\n[https://docs.dolby.io/media-apis/reference/introduction-to-media-io](https://docs.dolby.io/media-apis/reference/introduction-to-media-io)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Start Media Download",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{dolby-io-url}}/media/output?url={{output-file-link}}",
+					"host": [
+						"{{dolby-io-url}}"
+					],
+					"path": [
+						"media",
+						"output"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "{{output-file-link}}",
+							"description": "The url should be in the form dlb://object-key where the object-key can be any alpha-numeric string. The object-key is unique to your account API Key so there is no risk of collision with other users."
+						}
+					]
+				},
+				"description": "You can download media you previously uploaded with /media/input  \nor media that was generated through another Dolby Media API.\n\nThe temporary storage should allow you to read and write to the dlb://  \nlocations for a period of at least 24 hours before it is removed."
+			},
+			"response": []
+		},
+		{
+			"name": "Start Media Input",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody)",
+							"pm.collectionVariables.set(\"upload-file-url\", data.url)",
+							"",
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"url\": \"{{input-file-link}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dolby-io-url}}/media/input",
+					"host": [
+						"{{dolby-io-url}}"
+					],
+					"path": [
+						"media",
+						"input"
+					]
+				},
+				"description": "To use the Dolby provided temporary storage is a two step process.\n\nYou start by declaring a `dlb://` url that you can reference in any other Media API calls. The response will provide a url where you can put your media. This allows you to use the `dlb://` url as a short-cut for a temporary storage location.\n\nYou'll be returned a pre-signed url you can use to `PUT` and upload your media file. The temporary storage should allow you to read and write to the dlb:// locations for a period of at least 24 hours before it is removed."
+			},
+			"response": []
+		},
+		{
+			"name": "Upload Media to URL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": ""
+					}
+				},
+				"url": {
+					"raw": "{{upload-file-url}}",
+					"host": [
+						"{{upload-file-url}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{x-api-key}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "upload-file-url",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

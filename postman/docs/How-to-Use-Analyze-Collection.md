@@ -5,112 +5,33 @@ You can use Postman to try out the Analyze API. Postman is a widely used platfor
 ## You Will Need
 
 - Postman - If you haven't already, install the Postman application [here](https://www.postman.com/downloads/).
-- API Key (find this on your dashboard on the [Dolby.io website](https://dolby.io/))
-- A local audio file to upload
-
-## Setup
-
-### Import Files to Postman
-
-After installation of Postman, you need to import the JSON configuration files to complete the Postman collection setup.
-
-1. Download the directory `postman/collections`
-
-   > If you wish, you can also individually download the Analyze and Enhance collection JSON files. If this is the case be sure to also download the `Media_API_Test.postman_environment.json`
-
-2. Open Postman and select "File -> Import" and select "Folder" -> "Choose Folder on Your Computer"
-
-<img src="./images/choose_folder.png" width=300>
-
-3. Find and select the folder `collections`. You should see a window confirming your import of the collections and API set up. Select "Import".
-
-<img src="./images/import_analyze.png" width=300>
-
-4. You should now see the Analyze collection appear in your workspace on the left
-
-<img src="./images/analyze_collection.png" width=300>
-
-### Set Up Environment
-
-1. In the top-right corner, click on the "No Environment" dropdown and select "Media_API_Test"
-
-<img src="./images/select_media_api_test.png" width=300>
-
-2. Click on the sliding icon to the right of the "Environment" drop down and select "Manage Environments"
-
-<img src="./images/man_env_dropdown.png" width=300>
-
-3. Click directly on the "Media_API_Test" name
-
-<img src="./images/manage_env_select.png" width=400>
-
-4. Input your API Key in both the "Initial Value" and "Current Value" boxes. All other settings can be kept as-is. Click "Update" on the bottom right.
-
-<img src="./images/api_key.png" width=400>
-
-5. Close out of the Manage Environments window to complete environment setup.
+- Media API Key (find this on your dashboard on the [Dolby.io website](https://dolby.io/))
+- An accessible URL of the file you wish to process. If you do not have this, see [I/O Collection Tutorial](docs/How-to-Use-Enhance-Collection.md).
 
 ## Running the Analyze API
 
 This will walk you through the steps of calling the Analyze API.
 
-### Get Upload URL
-
-1. Click on the "Analyze" Collection on the left. The five requests are listed in order.
-
-<img src="./images/analyze.png" width=400>
-
-2. Click on "POST Get Upload URL"
-
-3. Click the **"Send"** button on the right-hand side of the above image to send a request to receive an **Upload URL** for your input file.
-
-> The Upload URL is a url that your file will be uploaded to temporarily. Learn more on the [Dolby.io docs](https://dolby.io/developers/media-processing/tutorials/media-input-and-output#dolby-media-input).
-
-- If you receive a `401` Unauthorized Error, make sure your API key is correct.
-- If the call is successful, the return status will be `200 OK` and you will see a URL in the response body window. Move onto "Upload File"
-
-### Upload File
-
-1. Click on "PUT Upload File"
-
-> This step is a PUT call that will upload a local file to the URL received in the previous step
-
-2. Select the "Body Tab", then click "Select File"
-
-3. Select an audio file from your local files to upload
-
-4. Make sure to keep the type selected in Postman as "binary"
-
-5. Click "Save" on the far right to persist your file uploaded to Postman
-
-<img src="./images/save_file_upload.png" width=600>
-
-6. Click **"Send"** to upload your file to the URL received in the "Get Upload URL" step
-
-- If you see an error of "Could not get any response", make sure the "Get Upload URL" step was completed correctly & you have received a valid return URL
-
-- If the call is successful, the return status will be `200 OK` and you will see a blank response in the response body window. Move onto "Analyze POST"
-
-### Analyze POST
+### Start Analyzing
 
 > This is the call that will initiate the analysis of your uploaded file.
 
-> If you wish you can utilize the [API Documentation on Dolby.io](https://dolby.io/developers/media-processing/api-reference/analyze) to change the parameters
+> If you wish you can utilize the [API Documentation on Dolby.io](https://docs.dolby.io/media-apis/reference/media-analyze-post) to change the parameters such as [loudness profile](https://docs.dolby.io/media-apis/docs/loudness#profiles).
 
 1. Click the **"Send"** button to start the analysis of your file
 
 - If you receive an error message, make sure the previous steps were completed correctly & that you have a valid request Body.
 - If the call is successful, the return status will be `200 OK` and you will see a `job_id` returned in the response body window. Move onto "Analyze GET Result"
 
-### Analyze GET Result
+### Get Analyze Status
 
-> This GET call will poll the returned `job_id` from the previous step to check the job status. Once the job is complete & successful, the response body will contain the JSON results of the file analysis.
+> This GET call will poll the returned `job_id` from the previous step to check the job status. Once the job is complete & successful, the response body will return that is it complete, where you should download the response file with the [I/O Collection Tutorial](docs/How-to-Use-Enhance-Collection.md).
 
 1. In this last request, simply click the **"Send"** button again to poll the status of the job kicked-off in the previous step. If the job is not yet complete, you will see the following in the response body:
 
 _Example Response for Job in Progress_
 
-```
+```json
 {
     "path": "/media/analyze",
     "status": "Running",
@@ -119,9 +40,9 @@ _Example Response for Job in Progress_
 }
 ```
 
-_Example Response for Successful Job_
+_Example Response for Successful Job File_
 
-```
+```json
 {
     "path": "/media/analyze",
     "status": "Success",
@@ -177,5 +98,164 @@ _Example Response for Successful Job_
     }
 }
 ```
+
+### Start Diagnosing
+
+> This is the call that will initiate the diagnostics of your uploaded file.
+
+> If you wish you can utilize the [API Documentation on Dolby.io](https://docs.dolby.io/media-apis/reference/media-diagnose-post) to change the parameters such as [content type](https://docs.dolby.io/media-apis/docs/how-to-improve-audio-by-content-type).
+
+1. Click the **"Send"** button to start the diagnostics of your file
+
+- If you receive an error message, make sure the previous steps were completed correctly & that you have a valid request Body.
+- If the call is successful, the return status will be `200 OK` and you will see a `job_id` returned in the response body window. Move onto "Get Diagnose Results"
+
+### Get Diagnose Results
+
+> This GET call will poll the returned `job_id` from the previous step to check the job status. Once the job is complete & successful, the response body will contain the JSON results of the file diagnostics.
+
+1. In this last request, simply click the **"Send"** button again to poll the status of the job kicked-off in the previous step. If the job is not yet complete, you will see the following in the response body:
+
+_Example Response for Job in Progress_
+
+```json
+{
+    "path": "/media/diagnose",
+    "status": "Running",
+    "progress": <Progress_Value>,
+    "api_version": <API_Version>
+}
+```
+
+_Example Response for Successful Job_
+
+```json
+{
+  "api_version": "v1.0",
+  "result": {
+    "media_info": {
+      "container": {
+        "kind": "wav",
+        "duration": 30,
+        "bitrate": 1536000,
+        "size": 5760000
+      },
+      "video": {
+        "codec": "dnxhd",
+        "frame_rate": 0,
+        "height": 0,
+        "width": 0,
+        "duration": 0,
+        "bitrate": 0
+      },
+      "audio": {
+        "codec": "pcm",
+        "sample_rate": 48000,
+        "bit_depth": 16,
+        "channels": 2,
+        "duration": 30,
+        "bitrate": 1536000
+      }
+    },
+    "audio": {
+      "quality_score": {
+        "average": 2.7,
+        "distribution": [
+          {
+            "lower_bound": 3,
+            "upper_bound": 4,
+            "duration": 44.5,
+            "percentage": 21.2
+          }
+        ],
+        "worst_segment": {
+          "start": 10.8,
+          "end": 15.8,
+          "score": 4.47
+        }
+      },
+      "noise_score": {
+        "average": 2.7,
+        "distribution": [
+          {
+            "lower_bound": 3,
+            "upper_bound": 4,
+            "duration": 44.5,
+            "percentage": 21.2
+          }
+        ]
+      },
+      "clipping": {
+        "events": 4
+      },
+      "loudness": {
+        "measured": -23.2,
+        "range": 6.8,
+        "sample_peak": -0.95,
+        "true_peak": -0.95,
+        "gating_mode": "speech"
+      },
+      "music": {
+        "percentage": 40
+      },
+      "silence": {
+        "percentage": 40,
+        "at_beginning": 5.7,
+        "at_end": 4.1,
+        "num_sections": 3,
+        "silent_channels": [
+          "left",
+          "right"
+        ]
+      },
+      "speech": {
+        "percentage": 40,
+        "events": {
+          "plosive": 4,
+          "sibilance": 20
+        }
+      }
+    }
+  },
+  "path": "/media/diagnose",
+  "status": "Success",
+  "error": {
+    "type": "string",
+    "title": "string",
+    "detail": "string"
+  },
+  "progress": 100
+}
+```
+
+### Start Analyzing Speech
+
+> This is the call that will initiate the analysis of your uploaded speech file.
+
+> If you wish you can utilize the [API Documentation on Dolby.io](https://docs.dolby.io/media-apis/reference/media-analyze-speech-post) to change the parameters.
+
+1. Click the **"Send"** button to start the analysis of your file
+
+- If you receive an error message, make sure the previous steps were completed correctly & that you have a valid request Body.
+- If the call is successful, the return status will be `200 OK` and you will see a `job_id` returned in the response body window. Move onto "Analyze GET Result"
+
+### Get Analyze Status
+
+> This GET call will poll the returned `job_id` from the previous step to check the job status. Once the job is complete & successful, the response body will return that is it complete, where you should download the response file with the [I/O Collection Tutorial](docs/How-to-Use-Enhance-Collection.md).
+
+1. In this last request, simply click the **"Send"** button again to poll the status of the job kicked-off in the previous step. If the job is not yet complete, you will see the following in the response body:
+
+_Example Response for Job in Progress_
+
+```json
+{
+    "path": "/media/analyze/speech",
+    "status": "Running",
+    "progress": <Progress_Value>,
+    "api_version": <API_Version>
+}
+```
+
+To download the final output one the status is finished, see [I/O Collection Tutorial](docs/How-to-Use-Enhance-Collection.md).
 
 - If you receive an error, check the received error code against the reference listed in the API docs.

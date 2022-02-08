@@ -1,0 +1,388 @@
+{
+	"info": {
+		"_postman_id": "2fd8ef2b-e62d-4645-a993-7d5c2170f6a5",
+		"name": "Platform",
+		"description": "[https://docs.dolby.io/media-apis/reference/media-api-platform-overview](https://docs.dolby.io/media-apis/reference/media-api-platform-overview)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Jobs",
+			"item": [
+				{
+					"name": "Get Jobs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dolby-io-url}}/media/jobs",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"jobs"
+							],
+							"query": [
+								{
+									"key": "submitted_after",
+									"value": null,
+									"description": "Query jobs that were submitted at or after the specified date and time (inclusive).",
+									"disabled": true
+								},
+								{
+									"key": "submitted_before",
+									"value": null,
+									"description": "Query jobs that were submitted at or before the specified date and time (inclusive). The submitted_before must be the same or later than submitted_after.",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": null,
+									"description": "Query jobs that have the specified status.",
+									"disabled": true
+								},
+								{
+									"key": "next_token",
+									"value": null,
+									"description": "Used when querying the next page of jobs. Specify the next_token that was returned in the previous call.",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Returns a list of the jobs that have been submitted in the past 31 days."
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel a Job",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{dolby-io-url}}/media/jobs/cancel?job_id={{job_id}}",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"jobs",
+								"cancel"
+							],
+							"query": [
+								{
+									"key": "job_id",
+									"value": "{{job_id}}"
+								}
+							]
+						},
+						"description": "**POST /media/jobs/cancel** requests cancellation of a previously submitted job."
+					},
+					"response": []
+				}
+			],
+			"description": "[https://docs.dolby.io/media-apis/reference/media-jobs-get](https://docs.dolby.io/media-apis/reference/media-jobs-get)"
+		},
+		{
+			"name": "Webhooks",
+			"item": [
+				{
+					"name": "Register Webhook",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody)",
+									"pm.collectionVariables.set(\"webhook-id\", data.webhook_id)",
+									"",
+									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"callback\": {\n        \"url\": \"{{callback-url}}\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dolby-io-url}}/media/webhooks",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"webhooks"
+							]
+						},
+						"description": "Register a webhook that is triggered when a job completes."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Webhook",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"callback\": {\n        \"url\": \"{{callback-url}}\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dolby-io-url}}/media/webhooks?id={{webhook-id}}",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"webhooks"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{webhook-id}}"
+								}
+							]
+						},
+						"description": "Update the previously registered webhook configuration."
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Webhook",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody)",
+									"pm.collectionVariables.set(\"callback-url\", data[0].callback.url)",
+									"",
+									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dolby-io-url}}/media/webhooks?id={{webhook-id}}",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"webhooks"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{webhook-id}}"
+								}
+							]
+						},
+						"description": "Retrieve the previously registered webhook configuration."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Webhook",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{dolby-io-url}}/media/webhooks?id={{webhook-id}}",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"webhooks"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{webhook-id}}"
+								}
+							]
+						},
+						"description": "Delete a previously registered webhook configuration."
+					},
+					"response": []
+				}
+			],
+			"description": "[https://docs.dolby.io/media-apis/reference/media-webhook-post](https://docs.dolby.io/media-apis/reference/media-webhook-post)"
+		},
+		{
+			"name": "Generate OAuth2 Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let data = JSON.parse(responseBody)",
+							"pm.environment.set(\"bearer-token\", data.access_token)",
+							"",
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{media-api-secret}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{x-api-key}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{dolby-io-url}}/media/oauth2/token",
+					"host": [
+						"{{dolby-io-url}}"
+					],
+					"path": [
+						"media",
+						"oauth2",
+						"token"
+					]
+				},
+				"description": "Generates an access token to be used for Bearer Authentication for Media API calls. The token will expire in 12 hours."
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "{{x-api-key}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "media-api-secret",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "callback-url",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "webhook-id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

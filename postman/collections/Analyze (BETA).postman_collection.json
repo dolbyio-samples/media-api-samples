@@ -1,0 +1,399 @@
+{
+	"info": {
+		"_postman_id": "86591d4d-3d00-4a6a-bc33-80e40d984d21",
+		"name": "Analyze (BETA)",
+		"description": "[https://docs.dolby.io/media-apis/reference/media-analyze-overview](https://docs.dolby.io/media-apis/reference/media-analyze-overview)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Diagnose",
+			"item": [
+				{
+					"name": "Start Diagnosing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody)",
+									"pm.environment.set(\"job_id\", data.job_id)",
+									"",
+									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"input\": \"{{input-file-link}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dolby-io-url}}/media/diagnose",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"diagnose"
+							]
+						},
+						"description": "The Dolby.io Media Analyze Audio Diagnose API provides a quick diagnosis for discovering audio quality issues with your media.\n\n> ### \n> \n> `❗️`\n> \n> `Beta API`\n> \n> This API is being made available as an early preview. If you have feedback on how you'd like to use the API please reach out to share your feedback with our team.\n> \n> [https://dolby.io/contact](https://dolby.io/contact)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Diagnose Results",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(`Running ${request.name}`)",
+									"var body = JSON.parse(responseBody);",
+									"",
+									"if (body.status == \"Running\" || body.status == \"Pending\"){",
+									"  setTimeout(function() {console.log(`Waiting for success...`)}, 2000);",
+									"  postman.setNextRequest(request.name);",
+									"} else {",
+									"  pm.test(\"Status code = 200\", function () { pm.response.to.have.status(200); });",
+									"  pm.test(\"API Status = 200\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    console.log(\"JSONDATA\", jsonData);",
+									"    pm.expect(jsonData.status).to.eql(\"Success\");",
+									"  });",
+									"  console.log(\"Success\")",
+									"  ",
+									"  postman.setNextRequest(null); ",
+									"  /* you can also try postman.setNextRequest(null); */",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dolby-io-url}}/media/diagnose?job_id={{job_id}}",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"diagnose"
+							],
+							"query": [
+								{
+									"key": "job_id",
+									"value": "{{job_id}}"
+								}
+							]
+						},
+						"description": "Check whether a given `job_id` has completed processing and retrieve the results."
+					},
+					"response": []
+				}
+			],
+			"description": "The Dolby.io Media Analyze Audio Diagnose API provides a quick diagnosis for discovering audio quality issues with your media.\n\n[https://docs.dolby.io/media-apis/reference/media-diagnose-post](https://docs.dolby.io/media-apis/reference/media-diagnose-post)"
+		},
+		{
+			"name": "Analyze",
+			"item": [
+				{
+					"name": "Start Analyzing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody)",
+									"pm.environment.set(\"job_id\", data.job_id)",
+									"",
+									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"output\": \"{{output-file-link}}\",\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dolby-io-url}}/media/analyze",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"analyze"
+							]
+						},
+						"description": "Start analyzing to learn about your media.\n\nThe input location of your source media file and output location of your Analyze JSON results file are required.\n\nThis is an asynchronous operation so you will receive a job_id to use in calling GET /media/analyze to retrieve the job status.\n\nThere are additional optional parameters that can be provided to identify the type of content and additional loudness or validation requirements. See the samples for examples of what requests and responses look like.\n\n> ### \n> \n> `❗️`\n> \n> Beta API\n> \n> This API is being made available as an early preview. If you have feedback on how you'd like to use the API please reach out to share your feedback with our team.\n> \n> [https://dolby.io/contact](https://dolby.io/contact)\n\n> ### \n> \n> 🚧\n> \n> Content Length\n> \n> Media content with duration less than 2 seconds will not be processed.\n> \n> The API will return an ERROR in this case."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Analyze Status",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(`Running ${request.name}`)",
+									"var body = JSON.parse(responseBody);",
+									"",
+									"if (body.status == \"Running\" || body.status == \"Pending\"){",
+									"  setTimeout(function() {console.log(`Waiting for success...`)}, 2000);",
+									"  postman.setNextRequest(request.name);",
+									"} else {",
+									"  pm.test(\"Status code = 200\", function () { pm.response.to.have.status(200); });",
+									"  pm.test(\"API Status = 200\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    console.log(\"JSONDATA\", jsonData);",
+									"    pm.expect(jsonData.status).to.eql(\"Success\");",
+									"  });",
+									"  console.log(\"Success\")",
+									"  ",
+									"  postman.setNextRequest(null); ",
+									"  /* you can also try postman.setNextRequest(null); */",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dolby-io-url}}/media/analyze?job_id={{job_id}}",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"analyze"
+							],
+							"query": [
+								{
+									"key": "job_id",
+									"value": "{{job_id}}"
+								}
+							]
+						},
+						"description": "For a given job_id, this method will check the job status.\n\nWhen **status**\\==*Success* you'll be able to retrieve your result from the **output** location you provided in the original `POST`."
+					},
+					"response": []
+				}
+			],
+			"description": "Start analyzing to learn about your media.\n\n[https://docs.dolby.io/media-apis/reference/media-analyze-post](https://docs.dolby.io/media-apis/reference/media-analyze-post)"
+		},
+		{
+			"name": "Analyze Speech",
+			"item": [
+				{
+					"name": "Get Analyze Speech Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody)",
+									"pm.environment.set(\"job_id\", data.job_id)",
+									"",
+									"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"output\": \"{{output-file-link}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dolby-io-url}}/media/analyze/speech",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"analyze",
+								"speech"
+							]
+						},
+						"description": "Start analyzing to learn about speech in your media.\n\nThe `input` location of your source media file and `output` location for your JSON results file are required.\n\nThis is an asynchronous operation so you will receive a `job_id` to use in calling `GET /media/analyze/speech` to retrieve the job status."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Analyze Speech Status",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(`Running ${request.name}`)",
+									"var body = JSON.parse(responseBody);",
+									"",
+									"if (body.status == \"Running\" || body.status == \"Pending\"){",
+									"  setTimeout(function() {console.log(`Waiting for success...`)}, 2000);",
+									"  postman.setNextRequest(request.name);",
+									"} else {",
+									"  pm.test(\"Status code = 200\", function () { pm.response.to.have.status(200); });",
+									"  pm.test(\"API Status = 200\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    console.log(\"JSONDATA\", jsonData);",
+									"    pm.expect(jsonData.status).to.eql(\"Success\");",
+									"  });",
+									"  console.log(\"Success\")",
+									"  ",
+									"  postman.setNextRequest(null); ",
+									"  /* you can also try postman.setNextRequest(null); */",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dolby-io-url}}/media/analyze/speech?job_id={{job_id}}",
+							"host": [
+								"{{dolby-io-url}}"
+							],
+							"path": [
+								"media",
+								"analyze",
+								"speech"
+							],
+							"query": [
+								{
+									"key": "job_id",
+									"value": "{{job_id}}"
+								}
+							]
+						},
+						"description": "For a given `job_id`, this method will check the job status.\n\nWhen **status**\\==*Success* you'll be able to retrieve your result from the **output** location you provided in the original `POST`."
+					},
+					"response": []
+				}
+			],
+			"description": "Start analyzing to learn about speech in your media.\n\n[https://docs.dolby.io/media-apis/reference/media-analyze-speech-post](https://docs.dolby.io/media-apis/reference/media-analyze-speech-post)"
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "{{x-api-key}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "loudness-profile",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "silence-threshold",
+			"value": "-60",
+			"type": "string"
+		},
+		{
+			"key": "silence-duration",
+			"value": "2",
+			"type": "string"
+		},
+		{
+			"key": "content-type",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

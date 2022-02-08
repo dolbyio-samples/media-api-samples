@@ -1,13 +1,13 @@
 {
 	"info": {
-		"_postman_id": "f5d3467b-0fdf-4b42-a917-87d28810034b",
-		"name": "Enhance",
-		"description": "The Dolby.io Media Enhance API improves the quality of your media.\n\n[https://docs.dolby.io/media-apis/reference/media-enhance-overview](https://docs.dolby.io/media-apis/reference/media-enhance-overview)",
+		"_postman_id": "fe9ae08e-e508-434e-b672-48fb1ef1a5af",
+		"name": "Transcode (BETA)",
+		"description": "The Dolby.io Media Transcode API transcodes your media to different formats.\n\n[https://docs.dolby.io/media-apis/reference/media-transcode-overview](https://docs.dolby.io/media-apis/reference/media-transcode-overview)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Start Enhancing",
+			"name": "Start Transcoding",
 			"event": [
 				{
 					"listen": "test",
@@ -27,7 +27,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"output\": \"{{output-file-link}}\",\n    \"content\": {\n        \"type\": \"{{content-type}}\"\n    }\n}",
+					"raw": "{\n    \"inputs\": [\n        {\n            \"source\": \"{{input-file-link}}\"\n        }\n    ],\n    \"outputs\": [\n        {\n            \"kind\": \"{{file-format}}\",\n            \"destination\": \"{{output-file-link}}\",\n            \"audio\": {\n                \"codec\": \"{{audio-codec}}\"\n            },\n            \"video\": {\n                \"codec\": \"{{video-codec}}\",\n                \"frame_rate\": {{frame-rate}},\n                \"width\": {{video-width}},\n                \"height\": {{video-height}}\n            }\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -35,21 +35,21 @@
 					}
 				},
 				"url": {
-					"raw": "{{dolby-io-url}}/media/enhance",
+					"raw": "{{dolby-io-url}}/media/transcode",
 					"host": [
 						"{{dolby-io-url}}"
 					],
 					"path": [
 						"media",
-						"enhance"
+						"transcode"
 					]
 				},
-				"description": "Start enhancing to improve your media.\n\nThe `input` location for your source media file as well as the `output` location for the processed result are required.\n\nThis is an asynchronous operation so you will receive a `job_id` where you can retrieve the results when enhancement is complete.\n\nThere are additional optional parameters that can be provided to control and select the type of enhancements made. See the samples for some examples of what requests and responses look like."
+				"description": "Start transcoding to modify the size, bitrates, and formats for your media.\n\nThe `inputs` location and `outputs` are required to identify the source  \nmaterial and target for results.\n\nThis is an asynchronous operation so you will receive a `job_id` to use in calling `GET /media/transcode` to retrieve the job status.\n\nThere are additional optional parameters that can be provided to further specify the desired output content types."
 			},
 			"response": []
 		},
 		{
-			"name": "Get Enhance Status",
+			"name": "Get Transcode Status",
 			"event": [
 				{
 					"listen": "test",
@@ -81,13 +81,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{dolby-io-url}}/media/enhance?job_id={{job_id}}",
+					"raw": "{{dolby-io-url}}/media/transcode?job_id={{job_id}}",
 					"host": [
 						"{{dolby-io-url}}"
 					],
 					"path": [
 						"media",
-						"enhance"
+						"transcode"
 					],
 					"query": [
 						{
@@ -96,7 +96,7 @@
 						}
 					]
 				},
-				"description": "For a given job_id, this method will check if the processing task has completed and return the enhanced results.\n\nWhen the **status** is *Success* you'll be able to retrieve your  \nresult from the **output** location you provided in the original  \n`POST`."
+				"description": "For a given job_id, this method will check if the transcoding task has completed and return transcoding results."
 			},
 			"response": []
 		}
@@ -105,13 +105,13 @@
 		"type": "apikey",
 		"apikey": [
 			{
-				"key": "key",
-				"value": "x-api-key",
+				"key": "value",
+				"value": "{{x-api-key}}",
 				"type": "string"
 			},
 			{
-				"key": "value",
-				"value": "{{x-api-key}}",
+				"key": "key",
+				"value": "x-api-key",
 				"type": "string"
 			}
 		]
@@ -138,8 +138,33 @@
 	],
 	"variable": [
 		{
-			"key": "content-type",
-			"value": "",
+			"key": "file-format",
+			"value": "mp4",
+			"type": "string"
+		},
+		{
+			"key": "frame-rate",
+			"value": "23.976",
+			"type": "string"
+		},
+		{
+			"key": "video-codec",
+			"value": "h264",
+			"type": "string"
+		},
+		{
+			"key": "audio-codec",
+			"value": "aac_lc",
+			"type": "string"
+		},
+		{
+			"key": "video-width",
+			"value": "1920",
+			"type": "string"
+		},
+		{
+			"key": "video-height",
+			"value": "1080",
 			"type": "string"
 		}
 	]
