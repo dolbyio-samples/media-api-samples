@@ -30,7 +30,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"content\": {\n        \"silence\": {\n            \"threshold\": {{silence-threshold}},\n            \"duration\": {{silence-duration}}\n        },\n        \"type\": \"{{content-type}}\"\n    }\n}",
+							"raw": "{\n    \"input\": \"{{input-file-link}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -140,7 +140,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"output\": \"{{output-file-link}}\",\n    \"loudness\": {\n        \"profile\": \"{{loudness-profile}}\"\n    }\n}",
+							"raw": "{\n    \"input\": \"{{input-file-link}}\",\n    \"output\": \"{{output-file-link}}\",\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -382,12 +382,12 @@
 		},
 		{
 			"key": "silence-threshold",
-			"value": "",
+			"value": "-60",
 			"type": "string"
 		},
 		{
 			"key": "silence-duration",
-			"value": "",
+			"value": "2",
 			"type": "string"
 		},
 		{

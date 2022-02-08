@@ -280,7 +280,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"const data = JSON.parse(responseBody)",
+							"let data = JSON.parse(responseBody)",
 							"pm.environment.set(\"bearer-token\", data.access_token)",
 							"",
 							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
@@ -315,12 +315,7 @@
 							"value": "client_credentials",
 							"type": "text"
 						}
-					],
-					"options": {
-						"raw": {
-							"language": "text"
-						}
-					}
+					]
 				},
 				"url": {
 					"raw": "{{dolby-io-url}}/media/oauth2/token",
