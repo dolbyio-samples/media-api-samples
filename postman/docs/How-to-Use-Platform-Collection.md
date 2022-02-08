@@ -5,51 +5,145 @@ You can use Postman to try out the Platform API. Postman is a widely used platfo
 ## You Will Need
 
 - Postman - If you haven't already, install the Postman application [here](https://www.postman.com/downloads/).
-- API Key (find this on your dashboard on the [Dolby.io website](https://dolby.io/))
+- Media API Key and Secret (find this on your dashboard on the [Dolby.io website](https://dolby.io/))
 - A local audio file to upload
 
-### Enhance POST
+### Generate OAuth2 Token
 
-> This is the call that will initiate the enhancement of your uploaded file.
+> This is the call that will create an OAuth2 Token for authentication using your API key and secret.
 
-> If you wish you can utilize the [API Documentation on Dolby.io](https://dolby.io/developers/media-processing/api-reference/analyze) to change the parameters
+1. Input your Media API Secret in **Platform -> Variables** and save.
 
-1. Click the **"Send"** button to start the enhancement of your file
+2. Click the **"Send"** button to generate your Bearer Token.
 
 - If you receive an error message, make sure the previous steps were completed correctly & that you have a valid request Body.
 - If the call is successful, the return status will be `200 OK` and you will see a `job_id` returned in the response body window. Move onto "Enhance GET Result"
 
-### Enhance GET Result
+Sample Response:
 
-> This GET call will poll the returned `job_id` from the previous step to check the job status. Once the job is complete & successful, the response body will contain the JSON results of the file analysis.
-
-1. In this last request, simply click the **"Send"** button again to poll the status of the job kicked-off in the previous step. If the job is not yet complete, you will see the following in the response body:
-
-_Example Response for Job in Progress_
-
-```
+```json
 {
-    "path": "/media/enhance",
-    "status": "Running",
-    "progress": <Progress_Value>,
-    "api_version": <API_Version>
+  "access_token": "aSAmpleAcESSt0ken",
+  "expires_in": 43199,
+  "token_type": "Bearer"
+}
+```
+
+### Media Jobs
+
+> This GET call will return a list of all jobs submitted in the past 31 days. Configure optional parameters seen in the [API Reference](https://docs.dolby.io/media-apis/reference/media-jobs-get).
+
+1. In this request, simply click the **"Send"** button to collect the response.
+
+_Example Response for Jobs_
+
+```json
+{
+  "jobs": [
+    {
+      "job_id": "082bfe89-eb23-442e-b6d3-54d1b3b01632",
+      "api_version": "v1.1",
+      "path": "/media/enhance",
+      "status": "Success",
+      "progress": 100,
+      "duration": 40.12,
+      "time_submitted": "2021-05-24T12:57:56.602Z",
+      "time_started": "2021-05-24T12:59:56.602Z",
+      "time_completed": "2021-05-24T13:05:12.502Z",
+      "expiry": "2021-06-24T12:59:56.602Z"
+    }
+  ],
+  "next_token": "eyJ0aW1lU3VibWl0dGVkIjoiMjAyMS0wNC0yMFQwMjowMDozOS4zODBaIiwiam9iSWQiOiJlNGNmNzA2Zi01MWYyLTQ1NDctODY0Zi0wN2M5N2E5OTg5ZDQiLCJhcHBJZCI6IlRFU1RfTE9DQUxfdG1penUifQ==",
+  "count": 100
 }
 ```
 
 - If you receive an error, check the received error code against the reference listed in the API docs.
 
-### Downloading the Output File
+### Cancel a Job
 
-1. Click the GET Download Output Request
+> This POST request will cancel a previous submitted job in progress.
 
-2. _Instead_ of clicking "Send", click on the arrow to the right of "Send", then select **"Send and Download"** from the dropdown
+1. In this request, simply click the **"Send"** button to send the request.
 
-<img src="./images/send_and_download.png" width=300>
+_Example Response for Cancel Job_
 
-3. If the request is successful, a Save File window will open in your file manager
+```json
+{
+  "status": 200,
+  "title": "The cancellation request is received and cancellation of the job will be attempted",
+  "detail": "Your cancel request was successfully submitted. Check the status of the job for further information."
+}
+```
 
-4. The default file extenstion is `*.bin`, so make sure to manually assign the same file extension as your uploaded input file (ex: change "response.bin" to  "enhanced_sample_file.wav")
+### Register Webhook
 
-<img src="./images/save_output.png" width=400>
+> This POST request will create a new webhook for an API key only if one does not already exist. Otherwise use Update Webhook.
 
-5. You can now open your process file wherever you saved it in your file system and hear the playback
+1. Add the callback URL under \*\* **Platform -> Variables** and save.
+
+2. Click **Send**.
+
+_Example Response for Cancel Job_
+
+```json
+{
+  "webhook_id": "webhook-6ee70181d63da278b47560a544fac083"
+}
+```
+
+### Update Webhook
+
+> This PUT request updates an existing webhook.
+
+1. Add the webhook ID and the new callback URL under \*\* **Platform -> Variables** and save.
+
+2. Click **Send**.
+
+_Example Response for Cancel Job_
+
+```json
+{
+  "webhook_id": "webhook-6ee70181d63da278b47560a544fac083"
+}
+```
+
+### Retrieve Webhook
+
+> This GET request retrieves the existing webhook configuration.
+
+1. Add the webhook ID under \*\* **Platform -> Variables** and save.
+
+2. Click **Send**.
+
+_Example Response for Cancel Job_
+
+```json
+[
+  {
+    "webhook_id": "webhook-6ee70181d63da278b47560a544fac083",
+    "callback": {
+      "url": "string",
+      "headers": {
+        "additionalProp": "string"
+      }
+    }
+  }
+]
+```
+
+### Delete Webhook
+
+> This DELETE request deletes an existing webhook.
+
+1. Add the webhook ID under \*\* **Platform -> Variables** and save.
+
+2. Click **Send**.
+
+_Example Response for Cancel Job_
+
+```json
+{
+  "webhook_id": "webhook-6ee70181d63da278b47560a544fac083"
+}
+```

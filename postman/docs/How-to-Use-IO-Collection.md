@@ -5,7 +5,7 @@ You can use Postman to try out the Input and Output API. Postman is a widely use
 ## You Will Need
 
 - Postman - If you haven't already, install the Postman application [here](https://www.postman.com/downloads/).
-- API Key (find this on your dashboard on the [Dolby.io website](https://dolby.io/))
+- Media API Key (find this on your dashboard on the [Dolby.io website](https://dolby.io/))
 - A local audio file to upload
 
 ### Get Upload URL
