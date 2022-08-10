@@ -70,7 +70,7 @@ std::string authenticate_dolbyio(std::string API_KEY, std::string API_SECRET, st
     curl_easy_setopt(auth, CURLOPT_WRITEFUNCTION, write_func);
     curl_easy_setopt(auth, CURLOPT_WRITEDATA, &bearer_token);
 
-        //stores result of POST
+        //getting result and closing the cURL instance
     std::cout << "========== RESULTS OF AUTH ==========" << std::endl;
     result = curl_easy_perform(auth); //checking for errors by storing json result
     curl_easy_cleanup(auth); //closes cURL after use
@@ -108,7 +108,7 @@ std::string upload_job_url(std::string token)
     curl_easy_setopt(upload, CURLOPT_CUSTOMREQUEST, "POST");
     curl_easy_setopt(upload, CURLOPT_URL, "https://api.dolby.com/media/input");
     
-    //headers for post
+      //headers for post
     struct curl_slist *headers = NULL;
     headers = curl_slist_append(headers, "Accept: application/json");
     headers = curl_slist_append(headers, "Content-Type: application/json");
@@ -116,14 +116,14 @@ std::string upload_job_url(std::string token)
     headers = curl_slist_append(headers, "x-internal-request: true");
     curl_easy_setopt(upload, CURLOPT_HTTPHEADER, headers);
     
-    //data for post
+      //data for post
     curl_easy_setopt(upload, CURLOPT_POSTFIELDS, file_up_char);
     
-    //writing results of post to a variable (holding upload url for later)
+      //writing results of post to a variable (holding upload url for later)
     curl_easy_setopt(upload, CURLOPT_WRITEFUNCTION, write_func);
     curl_easy_setopt(upload, CURLOPT_WRITEDATA, &dlb_input_url);
     
-    //getting result and closing the cURL
+      //getting result and closing the cURL instance
     std::cout << "========== RESULTS OF UPLOAD ==========" << std::endl;
     result = curl_easy_perform(upload);
     curl_easy_cleanup(upload);
@@ -166,7 +166,7 @@ void upload_file(std::string file_path, std::string job_url)
     curl_easy_setopt(cont_upload, CURLOPT_READDATA, enhance_file); //read from this file
     curl_easy_setopt(cont_upload, CURLOPT_INFILESIZE_LARGE, curl_size); //file size
     
-    //perform upload
+      //getting result and closing the cURL instance
     std::cout << "========== RESULTS OF UPLOAD PT2 ==========" << std::endl;
     result = curl_easy_perform(cont_upload); //perform read and upload
     curl_easy_cleanup(cont_upload);
@@ -225,7 +225,7 @@ std::string enhance_dolbyio(std::string token)
     curl_easy_setopt(enhance, CURLOPT_WRITEFUNCTION, write_func);
     curl_easy_setopt(enhance, CURLOPT_WRITEDATA, &dlb_job_url);
     
-        //getting result and closing the cURL
+        //getting result and closing the cURL instance
     std::cout << "========== RESULTS OF ENHANCE ==========" << std::endl;
     result = curl_easy_perform(enhance);
     curl_easy_cleanup(enhance);
@@ -278,7 +278,7 @@ std::string enhance_status(std::string token, std::string job_id)
     curl_easy_setopt(status, CURLOPT_WRITEFUNCTION, write_func);
     curl_easy_setopt(status, CURLOPT_WRITEDATA, &job_status);
 
-        //getting result and closing the cURL
+        //getting result and closing the cURL instance
     std::cout << "========== ENHANCE JOB STATUS ==========" << std::endl;
     result = curl_easy_perform(status);
     curl_easy_cleanup(status);
@@ -338,7 +338,7 @@ void download_file(std::string token, std::string file_path)
     if(fp){ //error catch in case file doesn't open
         curl_easy_setopt(download, CURLOPT_WRITEDATA, fp);
     
-        //getting result and and closing cURL
+        //getting result and closing the cURL instance
         std::cout << "========== RESULTS OF DOWNLOAD ==========" << std::endl;
         result = curl_easy_perform(download);
         curl_easy_cleanup(download);
@@ -348,4 +348,5 @@ void download_file(std::string token, std::string file_path)
     else{
         std::cout << "error downloading file" << std::endl;
     } //end else
+  
 } //end download_file
