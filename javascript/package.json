@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": ">=0.21.2",
-    "got": "^11.1.2",
+    "got": "^12.5.3",
     "request": "^2.88.2"
   }
 }
