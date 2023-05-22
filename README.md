@@ -10,6 +10,7 @@ Check the language specific README files for additional instructions.
 * [javascript/README.md](javascript/README.md)
 * [cURL/README.md](curl/README.md)
 * [postman/README.md](postman/README.md)
+* [cpp/README.md](cpp/README.md)
 
 ## API Key
 
